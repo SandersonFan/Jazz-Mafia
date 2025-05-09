@@ -1,77 +1,33 @@
-# Jazz Mafia Terminal - Boss Instructions
+# Jazz Band Mafia Terminal Dash
 
-Welcome, Boss! Here’s how to run your jazz mafia using the live dashboard and Supabase database.
+This project is a Next.js app styled as a bash terminal for the Jazz Band Mafia. It features:
+- Terminal-like UI
+- Login and signup with Supabase authentication
+- Approval workflow for new users
+- Main operations as terminal commands
 
-## 1. Initial Setup
-- Make sure you are added as a member in the Supabase `members` table with:
-  - `name`: benson
-  - `password`: (your secret password)
-  - `access`: 5
-  - `role`: Boss
-  - Fill in `instrument` and `bio` as you like.
+## Getting Started
 
-## 2. Logging In
-- Use the command:
-  ```
-  login benson [your_password]
-  ```
+1. Install dependencies:
+   ```bash
+   npm install
+   ```
+2. Run the development server:
+   ```bash
+   npm run dev
+   ```
+3. Configure Supabase:
+   - Set up your Supabase project and get the API keys.
+   - Add your Supabase credentials to a `.env.local` file.
 
-## 3. Approving New Members
-- Applicants use `signup` to apply.
-- To see pending applications:
-  ```
-  applications
-  ```
-- To approve an application:
-  ```
-  approve [name] [access_level] [role]
-  ```
-  - Example: `approve chet 1 Associate`
+## Supabase Setup
+- Create a `users` table with fields: id, email, username, status, access_level.
+- Create an `approvals` table: id, user_id, approver_id, approved (boolean).
+- Enable email/password authentication.
 
-## 4. Managing Members
-- Add a member directly:
-  ```
-  createmember [name] [password] [instrument] [bio] [access] [role]
-  ```
-- Remove a member:
-  ```
-  removemember [name]
-  ```
-
-## 5. Missions
-- Create a mission:
-  ```
-  createmission [title] [description]
-  ```
-- Remove a mission:
-  ```
-  removemission [id]
-  ```
-- Assign a mission:
-  ```
-  assign [id] [member]
-  ```
-
-## 6. Helpers (Funders, Suppliers, etc)
-- Add a helper:
-  ```
-  addhelper [name] [type] [contact] [notes]
-  ```
-  - Example: `addhelper BigAl Funder bigal@email.com "Funds the late-night gigs"`
-- List helpers:
-  ```
-  helpers
-  ```
-
-## 7. Other Useful Commands
-- `members` — List all members
-- `missions` — List all missions
-- `whoami` — Show your current user
-- `logout` — Log out
-- `help` — See available commands for your access level
+## Deployment
+- This app is designed to be hosted on GitHub Pages using the Next.js workflow.
 
 ---
 
-All data is live in Supabase. You can manage your crew, missions, and helpers directly from the terminal interface. If you need to reset or edit anything, you can do so in the Supabase dashboard as well.
-
-Stay jazzy, Boss!
+For more details, see the code and comments in the project.
