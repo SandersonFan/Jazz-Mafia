@@ -1,0 +1,60 @@
+body {
+    background: #181818;
+    color: #e0e0e0;
+    font-family: 'Fira Mono', 'Consolas', monospace;
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+#terminal-container {
+    background: #222;
+    border-radius: 8px;
+    box-shadow: 0 0 24px #000a;
+    width: 700px;
+    max-width: 95vw;
+    min-height: 400px;
+    padding: 24px;
+    position: relative;
+}
+#terminal-output {
+    min-height: 300px;
+    max-height: 400px;
+    overflow-y: auto;
+    font-size: 1.1em;
+    margin-bottom: 12px;
+}
+#terminal-form {
+    display: flex;
+    align-items: center;
+}
+.prompt {
+    color: #ffb347;
+    font-weight: bold;
+    margin-right: 8px;
+}
+#terminal-input {
+    background: transparent;
+    border: none;
+    color: #e0e0e0;
+    font-size: 1.1em;
+    outline: none;
+    width: 100%;
+}
+.output-line {
+    margin: 2px 0;
+}
+.access-1 { color: #b0c4de; }
+.access-2 { color: #87ceeb; }
+.access-3 { color: #ffd700; }
+.access-4 { color: #ff6347; }
+.access-5 { color: #ff1493; font-weight: bold; }
+.jazz {
+    font-style: italic;
+    color: #7fffd4;
+}
+.mafia {
+    text-shadow: 1px 1px 0 #000, 2px 2px 0 #222;
+    color: #ff5555;
+}
