@@ -28,14 +28,14 @@ function help() {
     printLine('<b>whoami</b> - Show current user');
     printLine('<b>members</b> - List all members');
     printLine('<b>access</b> - Show your access level');
-    printLine('<b>missions</b> - List all missions');
-    printLine('<b>mission [id]</b> - Show mission details');
     printLine('<b>jazzify</b> - Get a jazz quote');
     printLine('<b>clear</b> - Clear the terminal');
+    if (accessLevel >= 2) printLine('<b>missions</b> - List all missions');
+    if (accessLevel >= 2) printLine('<b>mission [id]</b> - Show mission details');
+    if (accessLevel >= 3) printLine('<b>complete [id]</b> - Mark mission complete');
+    if (accessLevel >= 4) printLine('<b>assign [id] [member]</b> - Assign a mission');
+    if (accessLevel >= 5) printLine('<b>secrethq</b> - Enter secret HQ');
     printLine('<b>logout</b> - Log out');
-    printLine('<b>assign [id] [member]</b> - Assign a mission (access 4+)');
-    printLine('<b>complete [id]</b> - Mark mission complete (access 3+)');
-    printLine('<b>secrethq</b> - Enter secret HQ (access 5 only)');
 }
 
 function clearTerminal() {

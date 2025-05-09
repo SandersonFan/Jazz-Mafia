@@ -1,7 +1,50 @@
 [
-  { "name": "benson", "access": 5, "password": "bebopboss" },
-  { "name": "ella", "access": 4, "password": "scatswing" },
-  { "name": "miles", "access": 3, "password": "coolcat" },
-  { "name": "billie", "access": 2, "password": "bluesqueen" },
-  { "name": "chet", "access": 1, "password": "rookiehorn" }
+  {
+    "name": "benson",
+    "access": 5,
+    "password": "bebopboss",
+    "instrument": "Saxophone",
+    "bio": "The true leader of the jazz mafia. Every note is an order.",
+    "role": "Boss"
+  },
+  {
+    "name": "duke",
+    "access": 5,
+    "password": "ivoryking",
+    "instrument": "Piano",
+    "bio": "The boss of the jazz mafia. Master of improvisation and strategy.",
+    "role": "Capo"
+  },
+  {
+    "name": "ella",
+    "access": 4,
+    "password": "scatswing",
+    "instrument": "Vocals",
+    "bio": "The voice that commands respect. Handles all the secret codes.",
+    "role": "Underboss"
+  },
+  {
+    "name": "miles",
+    "access": 3,
+    "password": "coolcat",
+    "instrument": "Trumpet",
+    "bio": "The smooth operator. Always knows when to lay low or blow loud.",
+    "role": "Lieutenant"
+  },
+  {
+    "name": "billie",
+    "access": 2,
+    "password": "bluesqueen",
+    "instrument": "Vocals",
+    "bio": "The heart of the crew. Keeps the rhythm and the secrets.",
+    "role": "Consigliere"
+  },
+  {
+    "name": "chet",
+    "access": 1,
+    "password": "rookiehorn",
+    "instrument": "Trumpet",
+    "bio": "The new kid. Learning the ropes, but got the swing.",
+    "role": "Associate"
+  }
 ]
