@@ -12,12 +12,14 @@ let commandHistory = [];
 let historyIndex = -1;
 
 // --- Supabase Setup ---
-const SUPABASE_URL = 'https://uznkkjczakyyinzhmoll.supabase.co';
+const SUPABASE_URL = 'https://uznkkjczakyyinzhmoll.functions.supabase.co/cors-proxy'; // <-- IMPORTANT: REPLACE THIS
 const SUPABASE_API_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV6bmtramN6YWt5eWluemhtb2xsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY4MDAyODksImV4cCI6MjA2MjM3NjI4OX0.huw9uasQL8dmS8xfgpZaRfVc-nuy5eMhl6jrE25g5k0';
 
 async function supabaseFetch(table, method = 'GET', body = null, query = '') {
-    // Always use https, never postgresql://
-    const url = `${SUPABASE_URL}/rest/v1/${table}${query}`;
+    // The path will be appended to the Edge Function URL, 
+    // so it should start with /rest/v1/
+    const path = `/rest/v1/${table}${query}`;
+    const url = `${SUPABASE_URL}${path}`; // URL now points to your Edge Function
     const options = {
         method,
         headers: {
@@ -33,15 +35,26 @@ async function supabaseFetch(table, method = 'GET', body = null, query = '') {
     try {
         const res = await fetch(url, options);
         if (!res.ok) {
-            const err = await res.text(); // Get detailed error from Supabase response body
-            throw new Error('Supabase error: ' + err); // This will be caught below
+            let errorText = '';
+            try {
+                // Try to parse the error as JSON, as the proxy might return a JSON error
+                const errJson = await res.json();
+                errorText = errJson.error || JSON.stringify(errJson);
+            } catch (jsonParseError) {
+                // Fallback to text if not JSON
+                errorText = await res.text();
+            }
+            throw new Error('Supabase error: ' + errorText); // This will be caught below
         }
         // If response is empty (e.g. for DELETE or PATCH with Prefer: return=minimal),
         // res.json() can fail. Check for content.
         const contentType = res.headers.get("content-type");
         if (contentType && contentType.indexOf("application/json") !== -1) {
             if (res.status === 204) return []; // No content, but successful
-            return await res.json();
+            // Check if response is empty before trying to parse JSON
+            const text = await res.text();
+            if (!text) return []; // Or handle as appropriate for empty successful responses
+            return JSON.parse(text);
         } else {
             // Handle non-JSON responses, e.g. successful DELETE might return empty or text
             return []; // Or await res.text() if text is expected
