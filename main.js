@@ -16,6 +16,7 @@ const SUPABASE_URL = 'https://uznkkjczakyyinzhmoll.supabase.co';
 const SUPABASE_API_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV6bmtramN6YWt5eWluemhtb2xsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY4MDAyODksImV4cCI6MjA2MjM3NjI4OX0.huw9uasQL8dmS8xfgpZaRfVc-nuy5eMhl6jrE25g5k0';
 
 async function supabaseFetch(table, method = 'GET', body = null, query = '') {
+    // Always use https, never postgresql://
     const url = `${SUPABASE_URL}/rest/v1/${table}${query}`;
     const options = {
         method,
@@ -23,13 +24,23 @@ async function supabaseFetch(table, method = 'GET', body = null, query = '') {
             'apikey': SUPABASE_API_KEY,
             'Authorization': `Bearer ${SUPABASE_API_KEY}`,
             'Content-Type': 'application/json',
-            'Prefer': 'return=representation'
+            'Prefer': 'return=representation',
+            // CORS fix: allow cross-origin
+            'Accept': 'application/json'
         }
     };
     if (body) options.body = JSON.stringify(body);
-    const res = await fetch(url, options);
-    if (!res.ok) throw new Error('Supabase error');
-    return await res.json();
+    try {
+        const res = await fetch(url, options);
+        if (!res.ok) {
+            const err = await res.text();
+            throw new Error('Supabase error: ' + err);
+        }
+        return await res.json();
+    } catch (e) {
+        printLine('Connection error: ' + e.message, 'mafia');
+        return [];
+    }
 }
 
 // --- Signup & Application ---
