@@ -1,7 +1,7 @@
 [
-  { "name": "duke", "access": 5 },
-  { "name": "ella", "access": 4 },
-  { "name": "miles", "access": 3 },
-  { "name": "billie", "access": 2 },
-  { "name": "chet", "access": 1 }
+  { "name": "benson", "access": 5, "password": "bebopboss" },
+  { "name": "ella", "access": 4, "password": "scatswing" },
+  { "name": "miles", "access": 3, "password": "coolcat" },
+  { "name": "billie", "access": 2, "password": "bluesqueen" },
+  { "name": "chet", "access": 1, "password": "rookiehorn" }
 ]
