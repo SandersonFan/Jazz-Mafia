@@ -8,6 +8,8 @@ let accessLevel = 1;
 let missions = [];
 let isLoggedIn = false;
 let memberData = null;
+let commandHistory = [];
+let historyIndex = -1;
 
 // --- Supabase Setup ---
 const SUPABASE_URL = 'https://uznkkjczakyyinzhmoll.supabase.co';
@@ -336,9 +338,31 @@ function showAccess() {
     printLine(`Your access level is <span class="access-${accessLevel}">${accessLevel}</span>.`);
 }
 
+terminalInput.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowUp') {
+        if (commandHistory.length === 0) return;
+        if (historyIndex === -1) historyIndex = commandHistory.length - 1;
+        else if (historyIndex > 0) historyIndex--;
+        terminalInput.value = commandHistory[historyIndex];
+        e.preventDefault();
+    } else if (e.key === 'ArrowDown') {
+        if (commandHistory.length === 0) return;
+        if (historyIndex === -1) return;
+        if (historyIndex < commandHistory.length - 1) historyIndex++;
+        else { historyIndex = -1; terminalInput.value = ''; return; }
+        terminalInput.value = commandHistory[historyIndex];
+        e.preventDefault();
+    }
+});
+
 terminalForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const input = terminalInput.value.trim();
+    if (input) {
+        commandHistory.push(input);
+        if (commandHistory.length > 100) commandHistory.shift();
+    }
+    historyIndex = -1;
     printLine(`<span class="prompt">jazz-mafia$</span> ${input}`);
     terminalInput.value = '';
     const [cmd, ...args] = input.split(' ');
