@@ -1,4 +1,4 @@
-// Jazz Mafia Terminal JS
+// Jazz Mafia Terminal TS/JS
 const terminalOutput = document.getElementById('terminal-output');
 const terminalForm = document.getElementById('terminal-form');
 const terminalInput = document.getElementById('terminal-input');
