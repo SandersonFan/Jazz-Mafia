@@ -33,13 +33,49 @@ async function supabaseFetch(table, method = 'GET', body = null, query = '') {
     try {
         const res = await fetch(url, options);
         if (!res.ok) {
-            const err = await res.text();
-            throw new Error('Supabase error: ' + err);
+            const err = await res.text(); // Get detailed error from Supabase response body
+            throw new Error('Supabase error: ' + err); // This will be caught below
         }
-        return await res.json();
+        // If response is empty (e.g. for DELETE or PATCH with Prefer: return=minimal),
+        // res.json() can fail. Check for content.
+        const contentType = res.headers.get("content-type");
+        if (contentType && contentType.indexOf("application/json") !== -1) {
+            if (res.status === 204) return []; // No content, but successful
+            return await res.json();
+        } else {
+            // Handle non-JSON responses, e.g. successful DELETE might return empty or text
+            return []; // Or await res.text() if text is expected
+        }
     } catch (e) {
-        printLine('Connection error: ' + e.message, 'mafia');
-        return [];
+        let fullErrorMessage = e.message || 'An unknown error occurred.';
+
+        if (typeof e.message === 'string' && e.message.toLowerCase().includes('failed to fetch')) {
+            fullErrorMessage += '<br>---<br>This "Failed to fetch" error usually means the browser could not connect to the Supabase server. Common reasons:';
+            fullErrorMessage += '<ul>';
+            fullErrorMessage += '<li><b>CORS (Cross-Origin Resource Sharing) Misconfiguration:</b> Ensure your Supabase project allows requests from the origin: <b>' + (typeof window !== 'undefined' ? window.location.origin : 'UNKNOWN_ORIGIN') + '</b>. Check "API" settings & "CORS Configuration" in your Supabase dashboard. Add your hosting origin there.</li>';
+            fullErrorMessage += '<li><b>Network Issues:</b> Check your internet connection. Firewalls, proxies, or VPNs might also block the request.</li>';
+            fullErrorMessage += '<li><b>Incorrect SUPABASE_URL:</b> Verify the `SUPABASE_URL` (currently: ' + SUPABASE_URL + ') is correct and accessible.</li>';
+            fullErrorMessage += '<li><b>Browser Extensions:</b> Ad-blockers or privacy-focused extensions can sometimes interfere with requests. Try disabling them temporarily.</li>';
+            fullErrorMessage += '</ul>';
+            fullErrorMessage += 'Since developer tools are unavailable, these are the most common troubleshooting steps. The error object itself often does not contain more server-side details for "Failed to fetch" as the connection to the server failed before a response could be processed.';
+        } else {
+            // For errors that are not "Failed to fetch" (e.g., "Supabase error: ..."),
+            // e.message should already contain the detailed message from Supabase (due to `throw new Error('Supabase error: ' + err)`).
+            // We can add the stack trace if available for other types of JavaScript errors.
+            if (e.stack) {
+                fullErrorMessage += '<br>---<br><b>Stack Trace:</b><br>' + e.stack.replace(/\n/g, '<br>');
+            }
+        }
+        
+        if (e.cause) {
+            let causeText = String(e.cause);
+            if (!fullErrorMessage.includes(causeText)) { // Avoid duplication
+                 fullErrorMessage += '<br>---<br><b>Cause:</b><br>' + causeText.replace(/\n/g, '<br>');
+            }
+        }
+
+        printLine('Connection error details:<br>' + fullErrorMessage, 'mafia');
+        return []; // Return an empty array or appropriate default
     }
 }
 
