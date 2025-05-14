@@ -1,4 +1,3 @@
-/* Modern responsive chat app with improved Supabase integration */
 const SUPABASE_URL = 'https://oturtamtzhwunjophzav.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im90dXJ0YW10emh3dW5qb3BoemF2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDcyMzE0NzAsImV4cCI6MjA2MjgwNzQ3MH0.efg_5tb8fHn606QLUspHlbThzMXA6bLRITnNudctoYE';
 
